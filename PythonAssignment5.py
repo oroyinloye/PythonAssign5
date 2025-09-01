@@ -1,31 +1,69 @@
-def process_file():
-    # Ask the user for the input filename
-    input_filename = input("📂 Enter the name of the file to read: ")
+# Assignment 1: Base class
+class Device:
+    def __init__(self, brand, model):
+        self._brand = brand      # Protected attribute (encapsulation)
+        self._model = model
 
-    try:
-        # Try to open and read the file
-        with open(input_filename, "r") as infile:
-            content = infile.read()
+    def device_info(self):
+        return f"{self._brand} {self._model}"
 
-        # Modify the content (example: reverse each line)
-        modified_lines = [line[::-1] for line in content.splitlines()]
-        modified_content = "\n".join(modified_lines)
+    def power_on(self):
+        print(f"{self.device_info()} is now powered on.")
 
-        # Define the output filename
-        output_filename = "modified_" + input_filename
 
-        # Write the modified content to the new file
-        with open(output_filename, "w") as outfile:
-            outfile.write(modified_content)
+# Derived class
+class Smartphone(Device):
+    def __init__(self, brand, model, storage, camera_megapixels):
+        super().__init__(brand, model)
+        self.storage = storage
+        self.camera_megapixels = camera_megapixels
+        self.installed_apps = []
 
-        print(f"✅ Success! Modified content written to '{output_filename}'.")
+    def install_app(self, app_name):
+        self.installed_apps.append(app_name)
+        print(f"{app_name} has been installed on {self.device_info()}.")
 
-    except FileNotFoundError:
-        print(f"❌ Error: The file '{input_filename}' was not found.")
-    except PermissionError:
-        print(f"🚫 Error: Permission denied when trying to read '{input_filename}'.")
-    except Exception as e:
-        print(f"⚠️ Unexpected error: {e}")
+    def take_photo(self):
+        print(
+            f"Photo taken with {self.camera_megapixels}MP camera on {self.device_info()}.")
 
-# Run the function
-process_file()
+    def show_installed_apps(self):
+        print(
+            f"Installed apps on {self.device_info()}: {', '.join(self.installed_apps)}")
+
+
+# Example usage
+my_phone = Smartphone("Samsung", "Galaxy S22", "256GB", 108)
+my_phone.power_on()
+my_phone.install_app("Instagram")
+my_phone.take_photo()
+my_phone.show_installed_apps()
+
+# Activity 2: Polymorphism Challenge
+
+
+class Vehicle:
+    def move(self):
+        raise NotImplementedError("Subclasses should implement this method.")
+
+
+class Car(Vehicle):
+    def move(self):
+        print("Driving")
+
+
+class Plane(Vehicle):
+    def move(self):
+        print("Flying")
+
+
+class Boat(Vehicle):
+    def move(self):
+        print("Sailing")
+
+
+# Polymorphic behavior in action
+vehicles = [Car(), Plane(), Boat()]
+
+for v in vehicles:
+    v.move(
